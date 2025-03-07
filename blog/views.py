@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
 from django.http import Http404
 from .models import Post
 
@@ -6,7 +7,10 @@ from .models import Post
 # Create your views here.
 def post_list(request):
     posts = Post.published.all()
-    return render(request, 'blog/post/list.html', {'posts': posts})
+    paginator = Paginator(posts, 3)
+    page_num = request.GET.get('page', 1)
+    post_list = paginator.page(page_num)
+    return render(request, 'blog/post/list.html', {'posts': post_list})
 
 
 def post_detail(request, year, month, day, post):

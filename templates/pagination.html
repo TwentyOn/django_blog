@@ -3,8 +3,12 @@
         {% if page.has_previous %} <!-- если есть предыдущая страница, то показываем её кнопку -->
             <a href="?page={{ page.previous_page_number }}">Previous</a> <!-- возвращает номер предыдущей страницы -->
         {% endif %}
-        {% for pages in page.paginator.page_range %}
-            <a class="page-link" href="?page={{pages}}">{{pages}}</a>
+        {% for num_page in page.paginator.page_range %}
+            {% if page.number != num_page %}
+                <a href="?page={{num_page}}">{{num_page}}</a>
+            {% else %}
+                <a style="color: orange" href="?page={{num_page}}">{{num_page}}</a>
+            {% endif %}
         {% endfor %}
         {% if page.has_next %} <!-- если есть следующая страница, то показываем её кнопку -->
             <a href="?page={{ page.next_page_number }}">Next</a> <!-- возвращает номер следующей страницы -->

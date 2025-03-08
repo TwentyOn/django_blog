@@ -3,9 +3,9 @@
         {% if page.has_previous %} <!-- если есть предыдущая страница, то показываем её кнопку -->
             <a href="?page={{ page.previous_page_number }}">Previous</a> <!-- возвращает номер предыдущей страницы -->
         {% endif %}
-        <span class="current">
-           Page {{ page.number }} of {{ page.paginator.num_pages }}.
-        </span>
+        {% for pages in page.paginator.page_range %}
+            <a class="page-link" href="?page={{pages}}">{{pages}}</a>
+        {% endfor %}
         {% if page.has_next %} <!-- если есть следующая страница, то показываем её кнопку -->
             <a href="?page={{ page.next_page_number }}">Next</a> <!-- возвращает номер следующей страницы -->
         {% endif %}

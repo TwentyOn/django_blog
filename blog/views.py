@@ -25,11 +25,14 @@ def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, publish__year=year, publish__month=month, publish__day=day, slug=post,
                              status=Post.Status.PUBLISHED)
 
-    return render(
-        request,
-        'blog/post/detail.html',
-        {'post': post}
-    )
+    comments = post.comments.filter(active=True)
+    # Форма для комментирования пользователями
+    form = CommentForm()
+    return render(request,
+                  'blog/post/detail.html',
+                  {'post': post,
+                   'comments': comments,
+                   'form': form})
 
 
 def post_share(request, post_id):
@@ -58,8 +61,9 @@ def post_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
 
     form = CommentForm(data=request.POST)
+    comment = None
     if form.is_valid():
-        cd = form.save(commit=False)
-        cd.post = post
-        cd.save()
-    return render(request, 'comment.html', {'form': form, 'post': post, 'comment': cd})
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.save()
+    return render(request, 'blog/post/comment.html', {'form': form, 'post': post, 'comment': comment})

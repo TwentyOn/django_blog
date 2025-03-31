@@ -40,6 +40,7 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
+        """функция, возвращающая канонический url-адресс для объекта класса Post """
         return reverse('blog:post_detail',
                        args=[self.publish.year,
                              self.publish.month,

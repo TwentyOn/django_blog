@@ -31,8 +31,8 @@ def post_detail(request, year, month, day, post):
     return render(request,
                   'blog/post/detail.html',
                   {'post': post,
-                   'comments': comments,
-                   'form': form})
+                        'comments': comments,
+                        'form': form})
 
 
 def post_share(request, post_id):

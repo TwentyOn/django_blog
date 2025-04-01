@@ -58,6 +58,8 @@ def post_share(request, post_id):
 
 @require_POST
 def post_comment(request, post_id):
+    """Функция обработки POST запросов на добавление комментариев
+       Декоратор requere_POST гарантирует, что функция не будет обрабатывать запросы отличиные от POST"""
     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
 
     form = CommentForm(data=request.POST)

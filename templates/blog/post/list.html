@@ -5,6 +5,11 @@
     {% for post in posts %}
         <h2>
             <a href="{{ post.get_absolute_url }}"> {{ post.title }}</a>
+            {% if post.tags.all %}
+                <p>{{post.tags.all|join:', '}}</p>
+            {% else %}
+                <p>Нет тегов</p>
+            {% endif %}
         </h2>
         <p class="date">
             Published {{ post.publish }} by {{ post.author }}

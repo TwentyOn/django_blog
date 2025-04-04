@@ -11,6 +11,14 @@
             Порекомендуйте этот пост
         </a>
     </p>
+    <p>
+        Похожие публикации:
+        {% for similar_post in similar_posts %}
+            <a href="{{ similar_post.get_absolute_url }}">{{similar_post}}</a>
+        {% empty %}
+            нет похожих публикаций
+        {% endfor %}
+    </p>
     {% with comments.count as total_comments %}
         <h2>
             {{ total_comments }} comment{{ total_comments|pluralize }}

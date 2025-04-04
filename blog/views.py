@@ -6,7 +6,7 @@ from django.conf import settings
 from .models import Post
 from .forms import EmailPostForm, CommentForm
 from taggit.models import Tag
-
+from django.db.models import Count
 
 # Create your views here.
 def post_list(request, tag_slug=None):
@@ -33,13 +33,20 @@ def post_detail(request, year, month, day, post):
                              status=Post.Status.PUBLISHED)
 
     comments = post.comments.filter(active=True)
+
     # Форма для комментирования пользователями
     form = CommentForm()
+
+    post_tags = post.tags.values_list('id', flat=True) # метод извлекает список идентификаторов id для данного поста
+    similar_posts = Post.published.filter(tags__in=post_tags).exclude(id=post.id) # запрос на получение всех постов с совпадающими тегами, кроме текущего
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4] # 4 поста с наибольшим количеством совпадающих тегов
+
     return render(request,
                   'blog/post/detail.html',
                   {'post': post,
                    'comments': comments,
-                   'form': form})
+                   'form': form,
+                   'similar_posts': similar_posts})
 
 
 def post_share(request, post_id):

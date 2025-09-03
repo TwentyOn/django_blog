@@ -1,0 +1,6 @@
+{% if comment %}
+    <h2>Комментарий успешно добавлен</h2>
+    <a href="{{post.get_absolute_url}}">Назад к посту</a>
+{% else %}
+    {% include 'blog/post/includes/add_comment_form.html' %}
+{% endif %}

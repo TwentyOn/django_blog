@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+{% block title %}Рекомендуем пост {% endblock %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить</button>
+    </form>
+{% endblock %}

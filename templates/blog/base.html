@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Блог{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+</head>
+<body>
+    <div id="content">
+        {% block content %}<h1>Стандартый контент</h1>{% endblock %}
+    </div>
+    <div id="sidebar">
+        <h2>Блог</h2>
+        <p>Это веб-приложение блог</p>
+    </div>
+</body>
+</html>

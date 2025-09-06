@@ -33,9 +33,10 @@ def post_detail(request, year, month, day, post):
     tags_ids = post.tags.values_list('id', flat=True)
     similar_posts = Post.objects.filter(tags__in=tags_ids).exclude(id=post.id) \
     .annotate(same_tags=Count('tags'))
-    print(similar_posts.query)
+    #print(similar_posts.query)
     similar_posts = similar_posts.order_by('-same_tags', '-publish')
-    comments = Comment.objects.filter(active=True)
+    print(post.id, post.comments.all())
+    comments = Comment.objects.filter(post=post, active=True)
     return render(request, 'blog/post/detail.html',
                   context={'post': post, 'form': CommentPostForm, 'comments': comments, 'similar_posts':similar_posts})
 

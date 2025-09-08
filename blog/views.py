@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import EmailPostForm, CommentPostForm
+from .forms import EmailPostForm, CommentPostForm, SearchForm
 from .models import Post, Comment
 from taggit.models import Tag
 from django.db.models import Count
@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.http import require_POST
+from django.contrib.postgres.search import SearchVector
 
 
 # Create your views here.
@@ -32,13 +33,13 @@ def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, publish__year=year, publish__month=month, publish__day=day, slug=post)
     tags_ids = post.tags.values_list('id', flat=True)
     similar_posts = Post.objects.filter(tags__in=tags_ids).exclude(id=post.id) \
-    .annotate(same_tags=Count('tags'))
-    #print(similar_posts.query)
+        .annotate(same_tags=Count('tags'))
+    # print(similar_posts.query)
     similar_posts = similar_posts.order_by('-same_tags', '-publish')
     print(post.id, post.comments.all())
     comments = Comment.objects.filter(post=post, active=True)
     return render(request, 'blog/post/detail.html',
-                  context={'post': post, 'form': CommentPostForm, 'comments': comments, 'similar_posts':similar_posts})
+                  context={'post': post, 'form': CommentPostForm, 'comments': comments, 'similar_posts': similar_posts})
 
 
 def post_share(request, post_id):
@@ -69,3 +70,19 @@ def add_comment(request, post_id):
         comment.post = post
         comment.save()
     return render(request, 'blog/post/includes/comment.html', context={'form': form, 'comment': comment, 'post': post})
+
+
+def post_search(request):
+    form = SearchForm()
+    query = None
+    result = []
+    if request.method == 'GET':
+        print('da')
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            result = Post.objects.annotate(search=SearchVector('body', 'title')).filter(
+                search=form.cleaned_data['query'])
+    return render(request, 'blog/post/search.html', context={'form': form,
+                                                            'query': query,
+                                                            'result': result})

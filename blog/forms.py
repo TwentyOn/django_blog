@@ -15,4 +15,4 @@ class CommentPostForm(forms.ModelForm):
         fields = ['name', 'body']
 
 class SearchForm(forms.Form):
-    query = forms.CharField(max_length=50)
+    query = forms.CharField(max_length=50, label='Введите запрос')

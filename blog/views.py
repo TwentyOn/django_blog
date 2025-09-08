@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.http import require_POST
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchRank, SearchQuery
 
 
 # Create your views here.
@@ -77,12 +77,14 @@ def post_search(request):
     query = None
     result = []
     if request.method == 'GET':
-        print('da')
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            result = Post.objects.annotate(search=SearchVector('body', 'title')).filter(
-                search=form.cleaned_data['query'])
+            search_vector = SearchVector('title', 'body', config='russian')
+            search_query = SearchQuery(query, config='russian')
+            result = (Post.published.
+                      annotate(search=search_vector, rang=SearchRank(search_vector, search_query)).
+                      filter(search=query).order_by('-rang'))
     return render(request, 'blog/post/search.html', context={'form': form,
-                                                            'query': query,
-                                                            'result': result})
+                                                             'query': query,
+                                                             'results': result})

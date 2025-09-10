@@ -12,7 +12,7 @@
         {% block content %}<h1>Стандартый контент</h1>{% endblock %}
     </div>
     <div id="sidebar">
-        <h2>Блог</h2>
+        <h1>Блог</h1>
         {% if user.is_authenticated %}
             <p>Привет {{ user.username }}!</p>
             <form method="post" action="{% url 'logout' %}">

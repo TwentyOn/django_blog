@@ -1,11 +1,30 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import SignUpForm
 from django.views import generic
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 
 # Create your views here.
-class SignUpview(generic.CreateView):
+class SignUpView(generic.CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('login')
+    initial = None
     template_name = 'registration/signup.html'
+
+    def get(self, request, *args, **qwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **qwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Создан аккаунт для {username}')
+
+            return redirect(to='/blog/')
+
+        return render(request, self.template_name, {'form': form})

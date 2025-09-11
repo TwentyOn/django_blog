@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 </head>
 <body>
+    {% if messages %}
+        {% for message in messages %}
+            {{ message.tags }} {{ message }}
+        {% endfor %}
+    {% endif %}
     <div id="content">
         {% block content %}<h1>Стандартый контент</h1>{% endblock %}
     </div>

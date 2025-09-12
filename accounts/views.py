@@ -4,6 +4,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -35,6 +36,7 @@ class SignUpView(generic.CreateView):
 
         return render(request, self.template_name, {'form': form})
 
+
 class CustomLoginView(LoginView):
     form_class = LoginForm
 
@@ -45,3 +47,8 @@ class CustomLoginView(LoginView):
             self.request.session.modified = True
 
         return super(CustomLoginView, self).form_valid(form)
+
+
+@login_required
+def profile(request):
+    return render(request, 'registration/profile.html')

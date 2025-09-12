@@ -128,7 +128,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 LOGIN_REDIRECT_URL = '/blog/'
-LOGOUT_REDIRECT_URL = '/blog/'
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

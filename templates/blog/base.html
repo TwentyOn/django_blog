@@ -20,13 +20,16 @@
         <h1>Блог</h1>
         {% if user.is_authenticated %}
             <p>Привет {{ user.username }}!</p>
+            <p><a href="{% url 'users-profile' %}">Профиль</a></p>
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <a href="#" onclick="parentNode.submit();">Выйти</a>
             </form>
         {% else %}
             <p>Вы не вошли в систему</p>
-            <a href="{% url 'login' %}">Войти</a>
+            <p><a href="{% url 'login' %}">Войти</a></p>
+            <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+            <p><a href="{% url 'signup' %}">Зарегистрироваться</a></p>
         {% endif %}
         <p>Это веб-приложение блог</p>
         <p>Всего публикаций: {% total_posts %}</p>

@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, LoginForm
+from . import forms
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 # Create your views here.
 class SignUpView(generic.CreateView):
-    form_class = SignUpForm
+    form_class = forms.SignUpForm
     success_url = reverse_lazy('login')
     initial = None
     template_name = 'registration/signup.html'
@@ -38,7 +39,7 @@ class SignUpView(generic.CreateView):
 
 
 class CustomLoginView(LoginView):
-    form_class = LoginForm
+    form_class = forms.LoginForm
 
     def form_valid(self, form):
         remember_me = form.cleaned_data.get('remember_me')
@@ -51,4 +52,21 @@ class CustomLoginView(LoginView):
 
 @login_required
 def profile(request):
-    return render(request, 'registration/profile.html')
+    if request.method == 'POST':
+        user_form = forms.UpdateUserForm(request.POST, instance=request.user)
+        profile_form = forms.UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Данные профиля успешно обновлены')
+            return redirect(to='users-profile')
+    else:
+        user_form = forms.UpdateUserForm(instance=request.user)
+        profile_form = forms.UpdateProfileForm(instance=request.user.profile)
+    return render(request, 'registration/profile.html', context={'user_form': user_form, 'profile_form': profile_form})
+
+
+class ChangePasswordView(PasswordChangeView, SuccessMessageMixin):
+    template_name = 'registration/change_password.html'
+    success_message = 'Пароль успешно изменён!'
+    success_url = reverse_lazy('users-profile')

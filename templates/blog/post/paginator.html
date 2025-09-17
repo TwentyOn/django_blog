@@ -1,15 +1,15 @@
-<div>
+<div class="pagination p-3">
     {% if page.has_previous %}
-        <a href="?page={{page.previous_page_number}}">Предыдущая</a>
+        <a href="?page={{page.previous_page_number}}" class="page-link">Предыдущая</a>
     {% endif %}
     {% for num_page in page.paginator.page_range %}
         {% if num_page == page.number %}
-            <a href="?page={{num_page}}" style="color: red">{{ num_page }}</a>
+            <a href="?page={{num_page}}" class="page-link disabled">{{ num_page }}</a>
         {% else %}
-            <a href="?page={{num_page }}">{{ num_page }}</a>
+            <a href="?page={{num_page }}" class="page-link">{{ num_page }}</a>
         {% endif %}
     {% endfor %}
     {% if page.has_next %}
-        <a href="?page={{page.next_page_number}}">Следующая</a>
+        <a href="?page={{page.next_page_number}}" class="page-link">Следующая</a>
     {% endif %}
 </div>

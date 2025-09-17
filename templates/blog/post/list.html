@@ -3,13 +3,16 @@
 {% block content %}
     {% for post in posts %}
         <div>
-            <h2>
+            <h2 class="fw-bolder">
                 <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
             </h2>
             <p class="tag">
                 {% if post.tags.all %}
+                    Теги:
                     {% for tag in post.tags.all %}
-                        <a href="{% url 'blog:tag_post_list' tag.slug %}">{{ tag.name }}</a>
+                        <a href="{% url 'blog:tag_post_list' tag.slug %}" class="badge bg-secondary text-decoration-none link-light">
+                            {{ tag.name }}
+                        </a>
                     {% endfor %}
                 {% else %}Теги: нет тегов (пока)
                 {% endif %}

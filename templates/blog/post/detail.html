@@ -2,28 +2,32 @@
 {% load blog_tags %}
 {% block title %}{{ post.title }}{% endblock %}
 {% block content %}
-    <h1>Пост "{{ post.title }}" пользователя {{ post.author }}</h1>
-    <p class="date">Опубликовано {{post.publish}} пользователем {{ post.author }}</p>
+    <h1 class="fw-bolder">Пост "{{ post.title }}" пользователя {{ post.author }}</h1>
+    <p class="text-muted fst-italic mb-2 text-start">Опубликовано {{post.publish}} пользователем {{ post.author }}</p>
     {{ post.body|markdown }}
-    <a href="{% url 'blog:share_post' post.id %}">Рекомендовать пост</a><br>
+    <a href="{% url 'blog:share_post' post.id %}" class="btn btn-primary float-left">Рекомендовать пост</a><br>
     <br>
     <a href="{% url 'blog:post_list' %}">К списку постов</a>
     {% if similar_posts %}
-        <h2>Похожие посты:</h2>
-        {% for similar_post in similar_posts %}
-            <p><a href="{{ similar_post.get_absolute_url }}">{{ similar_post.title }} {{similar_post.same_tags }}</a></p>
-        {% endfor %}
+        <div class="row card mt-2">
+            <h2>Похожие посты</h2>
+            {% for similar_post in similar_posts %}
+                <p><a href="{{ similar_post.get_absolute_url }}">{{ similar_post.title }} {{similar_post.same_tags }}</a></p>
+            {% endfor %}
+        </div>
     {% endif %}
-    {% include 'blog/post/includes/add_comment_form.html' %}
-    {% with comments.count as total_comments %}
-        <h2>Комментариев {{total_comments}}</h2>
-    {% endwith %}
-    <br>
-    {% for comment in comments %}
-        <div class="comment">
-            <p class="info">Комментарий {{ forloop.counter }} от {{comment.name }} {{comment.create}}</p>
-            {{ comment.body }}</div>
-    {% empty %}
-        <p>Нет комментариев</p>
-    {% endfor %}
+    <div class="row card mt-2">
+        {% include 'blog/post/includes/add_comment_form.html' %}
+        {% with comments.count as total_comments %}
+            <h2>Комментариев {{total_comments}}</h2>
+        {% endwith %}
+        <br>
+        {% for comment in comments %}
+            <div class="comment">
+                <p class="info">Комментарий {{ forloop.counter }} от {{comment.name }} {{comment.create}}</p>
+                {{ comment.body }}</div>
+        {% empty %}
+            <p>Нет комментариев</p>
+        {% endfor %}
+    </div>
 {% endblock %}

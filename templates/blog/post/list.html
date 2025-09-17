@@ -2,19 +2,21 @@
 {% load blog_tags %}
 {% block content %}
     {% for post in posts %}
-        <h2>
-            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-        </h2>
-        <p class="tag">
-            {% if post.tags.all %}
-                {% for tag in post.tags.all %}
-                    <a href="{% url 'blog:tag_post_list' tag.slug %}">{{ tag.name }}</a>
-                {% endfor %}
-            {% else %}Теги: нет тегов (пока)
-            {% endif %}
-        </p>
-        <p class="date">Опубликовано {{post.publish}} пользователем {{ post.author }}</p>
-        {{ post.body|markdown|truncatewords:30 }}
+        <div>
+            <h2>
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            </h2>
+            <p class="tag">
+                {% if post.tags.all %}
+                    {% for tag in post.tags.all %}
+                        <a href="{% url 'blog:tag_post_list' tag.slug %}">{{ tag.name }}</a>
+                    {% endfor %}
+                {% else %}Теги: нет тегов (пока)
+                {% endif %}
+                <p class="date">Опубликовано {{post.publish}} пользователем {{ post.author }}</p>
+                {{ post.body|markdown|truncatewords:30 }}
+            </p>
+        </div>
     {% endfor %}
     {% include 'blog/post/paginator.html' with page=posts%}
 {% endblock %}

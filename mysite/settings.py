@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django.contrib.postgres',
     'accounts.apps.AccountsConfig',
-    'social_django'
+    'social_django',
+    'django_bootstrap5'
 ]
 
 MIDDLEWARE = [

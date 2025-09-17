@@ -37,8 +37,11 @@ def post_detail(request, year, month, day, post):
     # print(similar_posts.query)
     similar_posts = similar_posts.order_by('-same_tags', '-publish')
     comments = Comment.objects.filter(post=post, active=True)
+    comment_form = CommentPostForm()
+    if request.user.is_authenticated:
+        comment_form = CommentPostForm({'name': request.user.username})
     return render(request, 'blog/post/detail.html',
-                  context={'post': post, 'form': CommentPostForm, 'comments': comments, 'similar_posts': similar_posts})
+                  context={'post': post, 'form': comment_form, 'comments': comments, 'similar_posts': similar_posts})
 
 
 def post_share(request, post_id):

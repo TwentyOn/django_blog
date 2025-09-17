@@ -11,13 +11,14 @@
                 <h2>Результатов по запросу "{{ query }}" не найдено</h2>
             {% endfor %}
         </ul>
+        <a href="{% url 'blog:post_search' %}">Искать снова</a>
     {% else %}
-        <h1>Поиск публикации</h1>
+        <h1>Поиск публикаций</h1>
         <form method="get" action="">
             <div>
                 {% csrf_token %}<br>
-                {{ form.as_p }}<br>
-                <input type="submit" value="Найти">
+                {{ form.query }}<br>
+                <input type="submit" value="Найти" class="btn btn-primary mb-3 btn-lg">
             </div>
         </form>
     {% endif %}

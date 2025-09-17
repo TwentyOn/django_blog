@@ -23,9 +23,15 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'users-profile' %}"><img
                                 class="rounded-circle" width="30" src="{{ user.profile.avatar.url }}"/> {{ user.username }}
                         </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <a class="nav-link" href="#" onclick="parentNode.submit();">Выйти</a>
+                            </form>
+                        </li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Войти</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Регистрация</a></li>
                     {% endif %}
                 </ul>
             </div>

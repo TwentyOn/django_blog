@@ -2,17 +2,32 @@
 
 {% block title %}<title>{{ title }}</title>{% endblock %}
 {% block content %}
+    <div class="card" style="width: 18rem;">
     {% for post in posts %}
         {% if post.thumbnail %}
-            <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" width="150"/>
+            <img class="card-img-top" src="{{ post.thumbnail.url }}" alt="{{ post.title }}" width="150"/>
         {% else %}
             <p>Нет изображения</p>
         {% endif %}
-        <strong>{{ post.title }}</strong>
-        <p>{{ post.description }}</p>
+        <div class="card-body">
+        <strong class="card-title"><a href="{{post.get_absolute_url}}">{{ post.title }}</a></strong>
+        <p class="card-text">{{ post.description }}</p>
         <small>{{ post.create }}</small>
         <hr>
         <span>{{ post.category.title }}</span>
         <br>
+            </div>
     {% endfor %}
+    </div>
+    <nav aria-label="Пример навигации по страницам">
+        <ul class="pagination">
+            {% for page_number in paginator.page_range %}
+                {% if page_number == page_obj.number %}
+                <li class="page-item active"><a class="page-link" href="#">{{page_number}}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{page_number}}">{{ page_number }}</a></li>
+                {% endif %}
+            {% endfor %}
+    </ul>
+    </nav>
 {% endblock %}

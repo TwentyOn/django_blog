@@ -19,4 +19,4 @@ class PostList(ListView):
 class PostDetail(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
-    slug_field = 'slugs'  # имя поля, содержащего slug, для передаваемой модели
+    slug_field = 'slug'  # имя поля модели, содержащего slug

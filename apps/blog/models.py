@@ -2,13 +2,10 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
+from django.shortcuts import reverse
 
 
 class Post(models.Model):
-    """
-    Модель постов для нашего блога
-    """
-
     STATUS_OPTIONS = (
         ('published', 'Опубликовано'),
         ('draft', 'Черновик')
@@ -20,11 +17,12 @@ class Post(models.Model):
     text = models.TextField(verbose_name='Полный текст записи')
     category = TreeForeignKey('Category', on_delete=models.PROTECT, related_name='posts', verbose_name='Категория')
     thumbnail = models.ImageField(default='default.jpg',
-        verbose_name='Изображение записи',
-        blank=True,
-        upload_to='images/thumbnails/',
-        validators=[FileExtensionValidator(allowed_extensions=('png', 'jpg', 'webp', 'jpeg', 'gif'))]
-    )
+                                  verbose_name='Изображение записи',
+                                  blank=True,
+                                  upload_to='images/thumbnails/',
+                                  validators=[
+                                      FileExtensionValidator(allowed_extensions=('png', 'jpg', 'webp', 'jpeg', 'gif'))]
+                                  )
     status = models.CharField(choices=STATUS_OPTIONS, default='published', verbose_name='Статус записи', max_length=10)
     create = models.DateTimeField(auto_now_add=True, verbose_name='Время добавления')
     update = models.DateTimeField(auto_now=True, verbose_name='Время обновления')
@@ -41,8 +39,12 @@ class Post(models.Model):
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
 
+    def get_absolute_url(self):
+        return reverse('post_detail', args=(self.slug,))
+
     def __str__(self):
         return self.title
+
 
 class Category(MPTTModel):
     """

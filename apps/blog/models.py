@@ -3,6 +3,7 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
 from django.shortcuts import reverse
+from apps.services.utils import unique_slug
 
 
 class Post(models.Model):
@@ -40,7 +41,11 @@ class Post(models.Model):
         verbose_name_plural = 'Статьи'
 
     def get_absolute_url(self):
-        return reverse('post_detail', args=(self.slug,))
+        return reverse('post_detail', args=[self.slug])
+
+    def save(self, *args, **kwargs):
+        self.slug = unique_slug(self, self.title, self.slug)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

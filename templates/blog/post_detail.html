@@ -4,4 +4,7 @@
     Подробнее о статье {{ post.title }}
     <hr>
     {{ post.text }}
+    <br>
+    <a href="{% url 'post_update' post.slug %}">Редактировать</a>
+    <a href="{% url 'post_list' %}">К списку статей</a>
 {% endblock %}

@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Post
+from .forms import NewPost, EditPost
+from django.contrib.auth.forms import AuthenticationForm
 
 
 # Create your views here.
@@ -20,3 +22,34 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
     slug_field = 'slug'  # имя поля модели, содержащего slug
+
+
+class CreatePost(CreateView):
+    form_class = NewPost
+    template_name = 'blog/create_post.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Форма создания нового поста'
+        return context
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class UpdatePost(UpdateView):
+    model = Post
+    form_class = EditPost
+    context_object_name = 'post'
+    template_name = 'blog/update_post.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Редактирование поста: {self.object.title}'
+        return context
+
+    def form_valid(self, form):
+        #self.instance.updater = self.request.user
+        return super().form_valid(form)
+

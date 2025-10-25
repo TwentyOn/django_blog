@@ -6,4 +6,6 @@
         {{ form.as_p }}
         <button type="submit" class="btn btn-sm btn-primary">Подтвердить</button>
     </form>
+    <br>
+    <a class="btn btn-sm btn-primary" href="{% url 'profile_detail' profile.pk %}">Отмена</a>
 {% endblock %}

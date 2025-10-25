@@ -1,22 +1,25 @@
 <ul class="nav justify-content-end">
     {% if user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'post_create' %}">Добавить пост</a>
+    </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
             {{user.username}}
         </a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="{% url 'profile_detail' user.profile.pk %}">Профиль</a></li>
-          <li><a class="dropdown-item" href="#">Другое действие</a></li>
+          <li><a class="dropdown-item" href="{% url 'post_list' %}">К списку постов</a></li>
           <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Отделенная ссылка</a></li>
+
+          <li>
+              <form method="post" action="{% url 'logout' %}" id="logout_form">
+                  {% csrf_token %}
+                  <a class="dropdown-item" href="#" onclick="parentNode.submit();">Выйти</a>
+                </form>
+          </li>
         </ul>
-    </li>
-    <li class="nav-item">
-        <form method="post" action="{% url 'logout' %}" id="logout_form">
-            {% csrf_token %}
-            <a class="nav-link" href="#" onclick="parentNode.submit();">Выйти</a>
-        </form>
     </li>
     {% else %}
     <li class="nav-item">

@@ -11,7 +11,8 @@ class PostList(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 3
+    ordering = ['-create']
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -22,9 +23,15 @@ class PostList(ListView):
 class PostListByCategory(ListView):
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
+    paginate_by = 3
 
     def get_queryset(self):
         return Post.objects.filter(category__slug=self.kwargs['category_slug'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Посты из категории "{self.object_list.first().category.title}"'
+        return context
 
 
 class PostDetail(DetailView):

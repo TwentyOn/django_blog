@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Post
 from .forms import NewPost, EditPost
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 # Create your views here.
@@ -24,9 +25,10 @@ class PostDetail(DetailView):
     slug_field = 'slug'  # имя поля модели, содержащего slug
 
 
-class CreatePost(CreateView):
+class CreatePost(LoginRequiredMixin, CreateView):
     form_class = NewPost
     template_name = 'blog/create_post.html'
+    login_url = 'post_list'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,11 +40,13 @@ class CreatePost(CreateView):
         return super().form_valid(form)
 
 
-class UpdatePost(UpdateView):
+class UpdatePost(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Post
     form_class = EditPost
     context_object_name = 'post'
     template_name = 'blog/update_post.html'
+    login_url = 'login'
+    success_message = 'Пост успешно обновлён!'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -50,6 +54,5 @@ class UpdatePost(UpdateView):
         return context
 
     def form_valid(self, form):
-        #self.instance.updater = self.request.user
+        form.instance.updater = self.request.user
         return super().form_valid(form)
-

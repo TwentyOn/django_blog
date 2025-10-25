@@ -2,9 +2,18 @@
 
 {% block content %}
     Подробнее о статье {{ post.title }}
+    <br>
+    <img src="{{post.thumbnail.url}}" width="900px" height="650px">
     <hr>
+    <h3>Описание:</h3>
+    {{ post.description }}
+    <br>
+    <h3>Текст:</h3>
     {{ post.text }}
     <br>
     <a href="{% url 'post_update' post.slug %}">Редактировать</a>
     <a href="{% url 'post_list' %}">К списку статей</a>
+{% for field in form.fields %}
+    {{ field.name }}
+{% endfor %}
 {% endblock %}

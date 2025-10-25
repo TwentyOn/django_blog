@@ -3,8 +3,6 @@ from .models import Post
 
 
 class NewPost(forms.ModelForm):
-    a = forms.CharField(widget=forms.Textarea())
-
     class Meta:
         model = Post
         fields = ('title', 'description', 'text', 'category', 'thumbnail', 'status')
@@ -18,8 +16,8 @@ class NewPost(forms.ModelForm):
 class EditPost(NewPost):
     class Meta:
         model = Post
-        fields = NewPost.Meta.fields + ('updater', 'fixed')
+        fields = NewPost.Meta.fields + ('fixed',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['fixed'].widget.attrs.update({'class': 'form-check-input'})
+        #self.fields['fixed'].widget.attrs.update({'class': 'form-check-input'})

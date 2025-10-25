@@ -1,0 +1,17 @@
+<ul class="nav justify-content-end">
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+        <form method="post" action="{% url 'logout' %}" id="logout_form">
+            {% csrf_token %}
+            <a class="nav-link" href="#" onclick="parentNode.submit();">Выйти</a>
+        </form>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'registration' %}">Зарегистрироваться</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">Войти</a>
+    </li>
+    {% endif %}
+</ul>

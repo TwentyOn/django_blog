@@ -12,7 +12,7 @@
         <div class="card-body">
             <strong class="card-title"><a href="{{post.get_absolute_url}}">{{ post.title }}</a></strong>
             <p class="card-text">{{ post.description }}</p>
-            <small>{{ post.create }}</small>
+            <small>Добавил {{ post.author }}, {{ post.create }}, в категорию {{ post.category }}</small>
             <hr>
             <span>{{ post.category.title }}</span>
             <br>

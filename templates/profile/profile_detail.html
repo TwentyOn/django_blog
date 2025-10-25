@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-md-9">
                     <h5 class="card-title">
-                        {{ profile }}
+                        {{ profile.user.username }}
                     </h5>
                     <div class="card-text">
                         <ul>
@@ -23,7 +23,7 @@
                             <li>О себе: {{ profile.bio }}</li>
                         </ul>
                         {% if request.user == profile.user %}
-                        <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-primary">
+                        <a href="{% url 'profile_edit' profile.pk %}" class="btn btn-sm btn-primary">
                             Редактировать профиль
                         </a>
                         {% endif %}

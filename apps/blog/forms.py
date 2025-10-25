@@ -20,4 +20,4 @@ class EditPost(NewPost):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.fields['fixed'].widget.attrs.update({'class': 'form-check-input'})
+        self.fields['fixed'].widget.attrs.update({'class': 'form-check-input'})

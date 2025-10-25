@@ -1,5 +1,19 @@
-<div class="row">
-    <div class="col-6 col-md-4">
-
+{% load mptt_tags %}
+    <div class="card">
+        <div class="card-header">Категории постов</div>
+        <div class="card-body">
+            {% full_tree_for_model blog.Category as categories %}
+            <ul class="root">
+                {% recursetree categories %}
+                <li>
+                    <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                    {% if not node.is_leaf_node %}
+                    <ul class="children">
+                        {{ children }}
+                    </ul>
+                    {% endif %}
+                </li>
+                {% endrecursetree %}
+            </ul>
+        </div>
     </div>
-</div>

@@ -2,23 +2,29 @@
 
 {% block title %}<title>{{ title }}</title>{% endblock %}
 {% block content %}
-    <div class="card">
     {% for post in posts %}
-        {% if post.thumbnail %}
-            <img class="card-img-top" src="{{ post.thumbnail.url }}" alt="{{ post.title }}" width="150"/>
-        {% else %}
-            <p>Нет изображения</p>
-        {% endif %}
-        <div class="card-body">
-            <strong class="card-title"><a href="{{post.get_absolute_url}}">{{ post.title }}</a></strong>
-            <p class="card-text">{{ post.description }}</p>
-            <small>Добавил {{ post.author }}, {{ post.create }}, в категорию {{ post.category }}</small>
-            <hr>
-            <span>{{ post.category.title }}</span>
-            <br>
+    <div class="card mb-3" >
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if post.thumbnail %}
+                    <img class="card-img-top" src="{{ post.thumbnail.url }}" alt="{{ post.title }}" width="150"/>
+                {% else %}
+                    <p>Нет изображения</p>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <strong class="card-title"><a href="{{post.get_absolute_url}}">{{ post.title }}</a></strong>
+                    <p class="card-text">{{ post.description }}</p>
+                    <small>
+                        Добавил {{ post.author }}, {{ post.create }}, в категорию
+                        <a href="{% url 'posts_by_category' post.category.slug %}">{{ post.category }}</a>
+                    </small>
+                </div>
+            </div>
         </div>
-    {% endfor %}
     </div>
+    {% endfor %}
     <nav aria-label="Пример навигации по страницам">
         <ul class="pagination">
             {% for page_number in paginator.page_range %}

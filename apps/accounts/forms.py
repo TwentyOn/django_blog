@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
+from django_recaptcha.fields import ReCaptchaField
 
 from .models import Profile
 
@@ -42,8 +43,9 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomLoginForm(AuthenticationForm, SuccessMessageMixin):
     success_message = 'Успешная авторизация.'
     next_page = reverse_lazy('post_list')
+    recaptcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['password'].widget.attrs['class'] = 'form-control'

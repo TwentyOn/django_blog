@@ -7,7 +7,7 @@ from .models import Post
 from .forms import NewPost, EditPost
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
+from taggit.models import Tag
 
 from .forms import AddCommentPostForm
 
@@ -37,6 +37,22 @@ class PostListByCategory(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Посты из категории "{self.object_list.first().category.title}"'
+        return context
+
+
+class PostListByTag(ListView):
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+    tag = None
+
+    def get_queryset(self):
+        self.tag = Tag.objects.get(slug=self.kwargs['tag_slug'])
+        posts = Post.objects.filter(tags__slug=self.tag.slug)
+        return posts
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Посты по тегу {self.tag.name}'
         return context
 
 
@@ -86,6 +102,7 @@ class UpdatePost(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 class AddComment(CreateView):
     form_class = AddCommentPostForm
+
     def is_ajax(self):
         return self.request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 

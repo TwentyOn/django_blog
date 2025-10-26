@@ -3,6 +3,7 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
 from django.shortcuts import reverse
+from taggit.managers import TaggableManager
 
 from apps.services.utils import unique_slug
 
@@ -34,6 +35,8 @@ class Post(models.Model):
                                 related_name='updater_posts', blank=True)
     fixed = models.BooleanField(verbose_name='Прикреплено', default=False)
 
+    tags = TaggableManager()
+
     class Meta:
         db_table = 'blog_post'
         ordering = ['-fixed', '-create']
@@ -46,8 +49,12 @@ class Post(models.Model):
         self.slug = unique_slug(self, self.title, self.slug)
         super().save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[self.slug])
+
     def __str__(self):
         return self.title
+
 
 
 class Comment(MPTTModel):

@@ -11,7 +11,7 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-    {% include 'blog/navbar.html' %}
+    {% include 'blog/includes/navbar.html' %}
     <div class="container">
         <div class="row">
             <div class="col-lg-8 p-4">
@@ -19,9 +19,11 @@
                 {% block content %} {% endblock %}
             </div>
             <div class="col-6 col-md-4">
-                {% include 'blog/sidebar.html' %}
+                {% include 'blog/includes/sidebar.html' %}
             </div>
         </div>
     </div>
+<script src="{% static 'backend.js' %}"></script>
+{% block script %}{% endblock %}
 </body>
 </html>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
 
 
 class NewPost(forms.ModelForm):
@@ -11,6 +11,19 @@ class NewPost(forms.ModelForm):
         super().__init__(*args, **qwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})
+
+
+class AddCommentPostForm(forms.ModelForm):
+    """
+    Форма добавления комментариев к статьям
+    """
+    parent = forms.IntegerField(widget=forms.HiddenInput, required=False)
+    body = forms.CharField(label='', widget=forms.Textarea(
+        attrs={'cols': 30, 'rows': 5, 'placeholder': 'Комментарий', 'class': 'form-control'}))
+
+    class Meta:
+        model = Comment
+        fields = ('body',)
 
 
 class EditPost(NewPost):

@@ -13,7 +13,16 @@
     <br>
     <a href="{% url 'post_update' post.slug %}">Редактировать</a>
     <a href="{% url 'post_list' %}">К списку статей</a>
-{% for field in form.fields %}
-    {{ field.name }}
-{% endfor %}
+    <hr>
+    <h3>Оставить комментарий:</h3>
+    <hr>
+    <h3>Комментарии:</h3>
+    <div class="card border-0">
+    <div class="card-body">
+        <h5 class="card-title">
+            Комментарии
+        </h5>
+        {% include 'blog/includes/comments.html' %}
+    </div>
+</div>
 {% endblock %}

@@ -18,4 +18,4 @@ class Profile(models.Model):
         verbose_name_plural = 'Профили'
 
     def get_absolute_url(self):
-        return reverse('profile_detail', args=self.pk)
+        return reverse('profile_detail', args=[self.pk])

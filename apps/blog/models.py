@@ -3,6 +3,7 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
 from django.shortcuts import reverse
+
 from apps.services.utils import unique_slug
 
 
@@ -40,8 +41,6 @@ class Post(models.Model):
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
 
-    def get_absolute_url(self):
-        return reverse('post_detail', args=[self.slug])
 
     def save(self, *args, **kwargs):
         self.slug = unique_slug(self, self.title, self.slug)
@@ -49,6 +48,33 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(MPTTModel):
+    choises = (('published', 'Опубликован'), ('Draft', 'Черновик'))
+
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(to=User, verbose_name='Автор комментария', on_delete=models.CASCADE)
+    body = models.TextField(max_length=500, verbose_name='Тест комментария')
+    status = models.CharField(choices=choises, verbose_name='Статус')
+    create = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+    parent = TreeForeignKey(to='self', on_delete=models.CASCADE, null=True, blank=True,
+                            verbose_name='Родительский комментарий')
+
+    class MpttMeta:
+        order_insertion_by = ('-create',)
+
+    class Meta:
+        ordering = ('-create',)
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return f'{self.author}:{self.body}'
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[self.post.slug])
 
 
 class Category(MPTTModel):

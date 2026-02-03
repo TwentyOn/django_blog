@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.blog.apps.BlogConfig',
-    'mptt',
     'apps.accounts.apps.AccountsConfig',
+    'apps.api_test.apps.ApiTestConfig',
+    'mptt',
     'taggit',
     'django_recaptcha'
 ]
